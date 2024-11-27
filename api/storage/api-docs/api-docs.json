@@ -1,0 +1,462 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Pedidos",
+        "description": "API para gestionar pedidos y ventas, incluyendo la creación de pedidos, consulta de productos y entrega.",
+        "contact": {
+            "email": "soporte@tusistema.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/admin/login": {
+            "post": {
+                "tags": [
+                    "Administradores"
+                ],
+                "summary": "Iniciar sesión de administrador",
+                "operationId": "111fc918475923a8762124dd6e744889",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nickname",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "nickname": {
+                                        "description": "Nombre de usuario del administrador",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Contraseña del administrador",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Administrador autenticado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Administrador autenticado"
+                                        },
+                                        "token": {
+                                            "description": "Token de acceso del administrador",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciales incorrectas"
+                    },
+                    "422": {
+                        "description": "Errores de validación"
+                    }
+                }
+            }
+        },
+        "/api/admin/profile": {
+            "get": {
+                "tags": [
+                    "Administradores"
+                ],
+                "summary": "Obtener el perfil del administrador autenticado",
+                "operationId": "3e1f78c188b6ec2fe9195299bbcd0c73",
+                "responses": {
+                    "200": {
+                        "description": "Perfil del administrador",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Administrador"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/logout": {
+            "post": {
+                "tags": [
+                    "Administradores"
+                ],
+                "summary": "Cerrar sesión del administrador",
+                "operationId": "02f6b79a7f14c7c8789224a731d13ab3",
+                "responses": {
+                    "200": {
+                        "description": "Administrador desconectado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Administrador desconectado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pedidos/crear": {
+            "post": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Crear un nuevo pedido",
+                "operationId": "5ed2597a08a76369a3755b416effe8cb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Pedido"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Pedido creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pedido"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Datos inválidos"
+                    },
+                    "422": {
+                        "description": "Errores de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pedidos/listar": {
+            "get": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Obtener todos los pedidos",
+                "operationId": "2b31e7c78a6722961396eddb8d14f57a",
+                "responses": {
+                    "200": {
+                        "description": "Lista de pedidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Pedido"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pedidos/buscar/{id}": {
+            "get": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Obtener un pedido por su ID",
+                "operationId": "6b33c46822992ac84e5b4a587167cb13",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del pedido",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Pedido encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pedido"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Pedido no encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pedidos/entregar/{id}": {
+            "put": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Marcar un pedido como entregado",
+                "operationId": "593f3aa6caaf44ff21219b65c831d952",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del pedido",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "user": {
+                                        "description": "Usuario que realiza la entrega",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Pedido entregado correctamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Se entregó el pedido y se generó la venta exitosamente."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Pedido no encontrado o no en estado PENDIENTE"
+                    },
+                    "500": {
+                        "description": "Error al generar la venta"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Administrador": {
+                "required": [
+                    "id",
+                    "nickname",
+                    "estado",
+                    "password",
+                    "fecha_creacion"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID del administrador",
+                        "type": "integer"
+                    },
+                    "estado": {
+                        "description": "Estado del administrador",
+                        "type": "string",
+                        "enum": [
+                            "ACTIVO",
+                            "INACTIVO"
+                        ]
+                    },
+                    "fecha_creacion": {
+                        "description": "Fecha de creación del administrador",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "fecha_actualizacion": {
+                        "description": "Fecha de última actualización del administrador",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "nickname": {
+                        "description": "Nombre de usuario del administrador",
+                        "type": "string"
+                    },
+                    "password": {
+                        "description": "Contraseña del administrador (no se debe enviar en respuestas)",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Pedido": {
+                "required": [
+                    "id",
+                    "estado",
+                    "clientes_id",
+                    "administradores_id",
+                    "cobrado",
+                    "direccion",
+                    "ventas_id"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID del pedido",
+                        "type": "integer"
+                    },
+                    "estado": {
+                        "description": "Estado del pedido",
+                        "type": "string",
+                        "enum": [
+                            "PENDIENTE",
+                            "ENTREGADO"
+                        ]
+                    },
+                    "fecha_creacion": {
+                        "description": "Fecha de creación del pedido",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "fecha_actualizacion": {
+                        "description": "Fecha de actualización del pedido",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "clientes_id": {
+                        "description": "ID del cliente",
+                        "type": "integer"
+                    },
+                    "administradores_id": {
+                        "description": "ID del administrador",
+                        "type": "integer"
+                    },
+                    "cobrado": {
+                        "description": "Monto cobrado",
+                        "type": "integer"
+                    },
+                    "direccion": {
+                        "description": "Dirección de entrega",
+                        "type": "string"
+                    },
+                    "fecha_entrega": {
+                        "description": "Fecha de entrega",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "ventas_id": {
+                        "description": "ID de la venta asociada al pedido",
+                        "type": "integer"
+                    },
+                    "productos": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Producto"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "Producto": {
+                "properties": {
+                    "id": {
+                        "description": "ID del producto",
+                        "type": "integer"
+                    },
+                    "cantidad": {
+                        "description": "Cantidad del producto",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Utiliza un token de autorización Bearer para autenticar las solicitudes.",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Administradores",
+            "description": "Administradores"
+        },
+        {
+            "name": "Pedidos",
+            "description": "Pedidos"
+        }
+    ]
+}
