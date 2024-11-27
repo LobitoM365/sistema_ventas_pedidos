@@ -8,6 +8,23 @@ use App\Repositories\ProductoRepository;
 use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
 
+
+/**
+ * @OA\Schema(
+ *     schema="Producto",
+ *     type="object",
+ *     required={"id", "estado", "fecha_creacion", "nombre", "precio_venta", "precio_base", "medida"},
+ *     @OA\Property(property="id", type="integer", description="ID del producto", example=101),
+ *     @OA\Property(property="estado", type="string", enum={"ACTIVO", "INACTIVO"}, description="Estado del producto", example="ACTIVO"),
+ *     @OA\Property(property="fecha_creacion", type="string", format="date-time", description="Fecha de creación del producto", example="2024-11-27T10:00:00Z"),
+ *     @OA\Property(property="fecha_actualizacion", type="string", format="date-time", description="Fecha de actualización del producto", example="2024-11-27T12:00:00Z"),
+ *     @OA\Property(property="nombre", type="string", description="Nombre del producto", example="Producto A"),
+ *     @OA\Property(property="descripcion", type="string", description="Descripción del producto", example="Este es un producto de ejemplo."),
+ *     @OA\Property(property="precio_venta", type="number", format="float", description="Precio de venta del producto", example=20.50),
+ *     @OA\Property(property="precio_base", type="number", format="float", description="Precio base del producto", example=15.00),
+ *     @OA\Property(property="medida", type="string", enum={"unidades", "metros", "kilos", "litros"}, description="Unidad de medida del producto", example="kilos")
+ * )
+ */
 class ProductoController extends Controller
 {
     protected $productoRepo;
@@ -17,7 +34,37 @@ class ProductoController extends Controller
         $this->productoRepo = $productoRepo;
     }
 
-    // Crear un nuevo producto
+    /**
+     * @OA\Post(
+     *     path="api/administradores/productos/registrar",
+     *     summary="Crear un nuevo producto",
+     *     tags={"Productos"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"nombre", "precio_venta", "precio_base", "medida"},
+     *             @OA\Property(property="nombre", type="string", description="Nombre del producto", example="Producto A"),
+     *             @OA\Property(property="descripcion", type="string", description="Descripción del producto", example="Descripción detallada del Producto A"),
+     *             @OA\Property(property="precio_venta", type="number", format="float", description="Precio de venta", example=100.50),
+     *             @OA\Property(property="precio_base", type="number", format="float", description="Precio base", example=80.00),
+     *             @OA\Property(property="medida", type="string", description="Unidad de medida", enum={"unidades", "metros", "kilos", "litros"}, example="unidades")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Producto creado exitosamente",
+     *         @OA\JsonContent(ref="#/components/schemas/Producto")
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error de validación"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error en la base de datos"
+     *     )
+     * )
+     */
     public function store(Request $request)
     {
         try {
@@ -50,7 +97,25 @@ class ProductoController extends Controller
         }
     }
 
-    // Listar todos los productos
+    /**
+     * @OA\Get(
+     *     path="api/administradores/productos/listar",
+     *     summary="Listar todos los productos",
+     *     tags={"Productos"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de productos",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(ref="#/components/schemas/Producto")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error al obtener productos"
+     *     )
+     * )
+     */
     public function index()
     {
         try {
@@ -67,7 +132,33 @@ class ProductoController extends Controller
         }
     }
 
-    // Buscar un producto por ID
+    /**
+     * @OA\Get(
+     *     path="api/administradores/productos/buscar/{id}",
+     *     summary="Buscar un producto por ID",
+     *     tags={"Productos"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID del producto a obtener",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Datos del producto",
+     *         @OA\JsonContent(ref="#/components/schemas/Producto")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Producto no encontrado"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error al obtener el producto"
+     *     )
+     * )
+     */
     public function show($id)
     {
         try {
@@ -83,7 +174,44 @@ class ProductoController extends Controller
         }
     }
 
-    // Actualizar un producto
+    /**
+     * @OA\Put(
+     *     path="api/administradores/productos/actualizar/{id}",
+     *     summary="Actualizar un producto",
+     *     tags={"Productos"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID del producto a actualizar",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"nombre", "precio_venta", "precio_base", "medida"},
+     *             @OA\Property(property="nombre", type="string", description="Nombre del producto", example="Producto A"),
+     *             @OA\Property(property="descripcion", type="string", description="Descripción del producto", example="Descripción detallada del Producto A"),
+     *             @OA\Property(property="precio_venta", type="number", format="float", description="Precio de venta", example=100.50),
+     *             @OA\Property(property="precio_base", type="number", format="float", description="Precio base", example=80.00),
+     *             @OA\Property(property="medida", type="string", description="Unidad de medida", enum={"unidades", "metros", "kilos", "litros"}, example="unidades")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Producto actualizado exitosamente",
+     *         @OA\JsonContent(ref="#/components/schemas/Producto")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Producto no encontrado"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error al actualizar el producto"
+     *     )
+     * )
+     */
     public function update(Request $request, $id)
     {
         try {
@@ -114,7 +242,32 @@ class ProductoController extends Controller
         }
     }
 
-    // Eliminar un producto
+    /**
+     * @OA\Delete(
+     *     path="api/administradores/productos/eliminar/{id}",
+     *     summary="Eliminar un producto",
+     *     tags={"Productos"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID del producto a eliminar",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Producto eliminado"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Producto no encontrado"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error al eliminar el producto"
+     *     )
+     * )
+     */
     public function destroy($id)
     {
         try {
@@ -130,11 +283,45 @@ class ProductoController extends Controller
         }
     }
 
-    // Añadir stock a un producto
+    /**
+     * @OA\Post(
+     *     path="api/administradores/productos/add/stock/{id}",
+     *     summary="Añadir stock a un producto",
+     *     tags={"Productos"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID del producto al que se le añadirá stock",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"cantidad"},
+     *             @OA\Property(property="cantidad", type="number", format="float", description="Cantidad de stock a añadir", example=10)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Stock añadido exitosamente",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/Producto"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Producto no encontrado"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error al añadir el stock"
+     *     )
+     * )
+     */
     public function addStock(Request $request, $id)
     {
         try {
-            // Validación de los datos de stock
             $request->validate([
                 'cantidad' => 'required|numeric|min:1'
             ]);
@@ -165,11 +352,45 @@ class ProductoController extends Controller
         }
     }
 
-    // Quitar stock a un producto
+    /**
+     * @OA\Post(
+     *     path="api/administradores/productos/remove/stock/{id}",
+     *     summary="Quitar stock a un producto",
+     *     tags={"Productos"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID del producto del que se le quitará stock",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"cantidad"},
+     *             @OA\Property(property="cantidad", type="number", format="float", description="Cantidad de stock a quitar", example=5)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Stock quitado exitosamente",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/Producto"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Producto no encontrado"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error al quitar el stock"
+     *     )
+     * )
+     */
     public function removeStock(Request $request, $id)
     {
         try {
-            // Validación de los datos de stock
             $request->validate([
                 'cantidad' => 'required|numeric|min:1'
             ]);

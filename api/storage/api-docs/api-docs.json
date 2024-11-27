@@ -13,13 +13,13 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/api/admin/login": {
+        "api/administradores/login": {
             "post": {
                 "tags": [
                     "Administradores"
                 ],
                 "summary": "Iniciar sesión de administrador",
-                "operationId": "111fc918475923a8762124dd6e744889",
+                "operationId": "af86db93a8d403fa3a3f144cab39f1fb",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -74,13 +74,13 @@
                 }
             }
         },
-        "/api/admin/profile": {
+        "api/administradores/profile": {
             "get": {
                 "tags": [
                     "Administradores"
                 ],
                 "summary": "Obtener el perfil del administrador autenticado",
-                "operationId": "3e1f78c188b6ec2fe9195299bbcd0c73",
+                "operationId": "45a04b822b8cc63c325dae0dbf11328d",
                 "responses": {
                     "200": {
                         "description": "Perfil del administrador",
@@ -103,13 +103,13 @@
                 ]
             }
         },
-        "/api/admin/logout": {
+        "api/administradores/logout": {
             "post": {
                 "tags": [
                     "Administradores"
                 ],
                 "summary": "Cerrar sesión del administrador",
-                "operationId": "02f6b79a7f14c7c8789224a731d13ab3",
+                "operationId": "67f01f288615ed252bbeb62d25e3bacc",
                 "responses": {
                     "200": {
                         "description": "Administrador desconectado exitosamente",
@@ -138,13 +138,399 @@
                 ]
             }
         },
-        "/api/pedidos/crear": {
+        "api/administradores/clientes": {
+            "get": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Obtener todos los clientes",
+                "operationId": "f3a3167835e99ea8cd9a8fd7cba39011",
+                "responses": {
+                    "200": {
+                        "description": "Lista de clientes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Cliente"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error al obtener los clientes"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Crear un nuevo cliente",
+                "operationId": "5b475c15ed0dabadb35f160579db180f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre",
+                                    "cedula",
+                                    "telefono",
+                                    "password",
+                                    "nickname"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "description": "Nombre del cliente",
+                                        "type": "string"
+                                    },
+                                    "cedula": {
+                                        "description": "Cédula del cliente",
+                                        "type": "string"
+                                    },
+                                    "telefono": {
+                                        "description": "Teléfono del cliente",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Contraseña del cliente",
+                                        "type": "string"
+                                    },
+                                    "nickname": {
+                                        "description": "Nombre de usuario del cliente",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cliente creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Cliente creado exitosamente"
+                                        },
+                                        "cliente": {
+                                            "$ref": "#/components/schemas/Cliente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Errores de validación"
+                    },
+                    "500": {
+                        "description": "Error al crear el cliente"
+                    }
+                }
+            }
+        },
+        "api/administradores/clientes/{id}": {
+            "get": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Obtener un cliente por ID",
+                "operationId": "dff3c48527cff24dbda26646a56560fe",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del cliente a obtener",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Datos del cliente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Cliente"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Cliente no encontrado"
+                    },
+                    "500": {
+                        "description": "Error al obtener el cliente"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Actualizar los datos de un cliente",
+                "operationId": "eb34569e49f9a8b81450acaa71f73790",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del cliente a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre",
+                                    "cedula",
+                                    "telefono",
+                                    "estado",
+                                    "nickname"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "description": "Nombre del cliente",
+                                        "type": "string"
+                                    },
+                                    "cedula": {
+                                        "description": "Cédula del cliente",
+                                        "type": "string"
+                                    },
+                                    "telefono": {
+                                        "description": "Teléfono del cliente",
+                                        "type": "string"
+                                    },
+                                    "estado": {
+                                        "description": "Estado del cliente",
+                                        "type": "string",
+                                        "enum": [
+                                            "ACTIVO",
+                                            "INACTIVO"
+                                        ]
+                                    },
+                                    "nickname": {
+                                        "description": "Nombre de usuario del cliente",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cliente actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Cliente actualizado exitosamente"
+                                        },
+                                        "cliente": {
+                                            "$ref": "#/components/schemas/Cliente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Cliente no encontrado"
+                    },
+                    "422": {
+                        "description": "Errores de validación"
+                    },
+                    "500": {
+                        "description": "Error al actualizar el cliente"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Eliminar un cliente",
+                "operationId": "a0240a61c0b63b24624fb75fb437587d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del cliente a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cliente eliminado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Cliente eliminado exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Cliente no encontrado"
+                    },
+                    "500": {
+                        "description": "Error al eliminar el cliente"
+                    }
+                }
+            }
+        },
+        "api/administradores/clientes/login": {
+            "post": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Iniciar sesión de un cliente",
+                "operationId": "ac93b6a938133a1e294752a0f95dcae2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nickname",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "nickname": {
+                                        "description": "Nombre de usuario del cliente",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Contraseña del cliente",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cliente autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Cliente autenticado"
+                                        },
+                                        "token": {
+                                            "description": "Token JWT generado",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciales incorrectas"
+                    },
+                    "422": {
+                        "description": "Errores de validación"
+                    },
+                    "500": {
+                        "description": "Error al autenticar al cliente"
+                    }
+                }
+            }
+        },
+        "api/administradores/clientes/profile": {
+            "get": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Obtener el perfil del cliente autenticado",
+                "operationId": "465351e61f67c2fb2f0259b9e217c59c",
+                "responses": {
+                    "200": {
+                        "description": "Datos del cliente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Cliente"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "api/administradores/clientes/logout": {
+            "post": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Cerrar sesión del cliente",
+                "operationId": "86281d33ae82b7e7b6acf1acd1aa7629",
+                "responses": {
+                    "200": {
+                        "description": "Cliente desconectado"
+                    },
+                    "401": {
+                        "description": "No autorizado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "api/administradores/pedidos/crear": {
             "post": {
                 "tags": [
                     "Pedidos"
                 ],
                 "summary": "Crear un nuevo pedido",
-                "operationId": "5ed2597a08a76369a3755b416effe8cb",
+                "operationId": "36ce0633efd79c802454842be4fdb324",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -180,13 +566,13 @@
                 ]
             }
         },
-        "/api/pedidos/listar": {
+        "api/administradores/pedidos/listar": {
             "get": {
                 "tags": [
                     "Pedidos"
                 ],
                 "summary": "Obtener todos los pedidos",
-                "operationId": "2b31e7c78a6722961396eddb8d14f57a",
+                "operationId": "5da7b608787c2a6ec1cc8500372bbfd8",
                 "responses": {
                     "200": {
                         "description": "Lista de pedidos",
@@ -209,13 +595,13 @@
                 ]
             }
         },
-        "/api/pedidos/buscar/{id}": {
+        "api/administradores/pedidos/buscar/{id}": {
             "get": {
                 "tags": [
                     "Pedidos"
                 ],
                 "summary": "Obtener un pedido por su ID",
-                "operationId": "6b33c46822992ac84e5b4a587167cb13",
+                "operationId": "5571860ccb8d4018febb609ae168726d",
                 "parameters": [
                     {
                         "name": "id",
@@ -249,13 +635,13 @@
                 ]
             }
         },
-        "/api/pedidos/entregar/{id}": {
+        "api/administradores/pedidos/entregar/{id}": {
             "put": {
                 "tags": [
                     "Pedidos"
                 ],
                 "summary": "Marcar un pedido como entregado",
-                "operationId": "593f3aa6caaf44ff21219b65c831d952",
+                "operationId": "258992385b60c308a117637fd67caeac",
                 "parameters": [
                     {
                         "name": "id",
@@ -313,6 +699,533 @@
                     }
                 ]
             }
+        },
+        "api/administradores/productos/registrar": {
+            "post": {
+                "tags": [
+                    "Productos"
+                ],
+                "summary": "Crear un nuevo producto",
+                "operationId": "3a779db3dc2f9164c5059572dba4ddc2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre",
+                                    "precio_venta",
+                                    "precio_base",
+                                    "medida"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "description": "Nombre del producto",
+                                        "type": "string",
+                                        "example": "Producto A"
+                                    },
+                                    "descripcion": {
+                                        "description": "Descripción del producto",
+                                        "type": "string",
+                                        "example": "Descripción detallada del Producto A"
+                                    },
+                                    "precio_venta": {
+                                        "description": "Precio de venta",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 100.5
+                                    },
+                                    "precio_base": {
+                                        "description": "Precio base",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 80
+                                    },
+                                    "medida": {
+                                        "description": "Unidad de medida",
+                                        "type": "string",
+                                        "enum": [
+                                            "unidades",
+                                            "metros",
+                                            "kilos",
+                                            "litros"
+                                        ],
+                                        "example": "unidades"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Producto creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Producto"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    },
+                    "500": {
+                        "description": "Error en la base de datos"
+                    }
+                }
+            }
+        },
+        "api/administradores/productos/listar": {
+            "get": {
+                "tags": [
+                    "Productos"
+                ],
+                "summary": "Listar todos los productos",
+                "operationId": "0df045a3deaba8e493cfcce1c6d9ef05",
+                "responses": {
+                    "200": {
+                        "description": "Lista de productos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Producto"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error al obtener productos"
+                    }
+                }
+            }
+        },
+        "api/administradores/productos/buscar/{id}": {
+            "get": {
+                "tags": [
+                    "Productos"
+                ],
+                "summary": "Buscar un producto por ID",
+                "operationId": "7d69078d9de2d8678dd3448d7ad3ef4a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del producto a obtener",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Datos del producto",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Producto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Producto no encontrado"
+                    },
+                    "500": {
+                        "description": "Error al obtener el producto"
+                    }
+                }
+            }
+        },
+        "api/administradores/productos/actualizar/{id}": {
+            "put": {
+                "tags": [
+                    "Productos"
+                ],
+                "summary": "Actualizar un producto",
+                "operationId": "b589555df4ebd3ffa86028dece766139",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del producto a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre",
+                                    "precio_venta",
+                                    "precio_base",
+                                    "medida"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "description": "Nombre del producto",
+                                        "type": "string",
+                                        "example": "Producto A"
+                                    },
+                                    "descripcion": {
+                                        "description": "Descripción del producto",
+                                        "type": "string",
+                                        "example": "Descripción detallada del Producto A"
+                                    },
+                                    "precio_venta": {
+                                        "description": "Precio de venta",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 100.5
+                                    },
+                                    "precio_base": {
+                                        "description": "Precio base",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 80
+                                    },
+                                    "medida": {
+                                        "description": "Unidad de medida",
+                                        "type": "string",
+                                        "enum": [
+                                            "unidades",
+                                            "metros",
+                                            "kilos",
+                                            "litros"
+                                        ],
+                                        "example": "unidades"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Producto actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Producto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Producto no encontrado"
+                    },
+                    "500": {
+                        "description": "Error al actualizar el producto"
+                    }
+                }
+            }
+        },
+        "api/administradores/productos/eliminar/{id}": {
+            "delete": {
+                "tags": [
+                    "Productos"
+                ],
+                "summary": "Eliminar un producto",
+                "operationId": "b6e97afb83ae5a1f68c2e6d5af703cf8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del producto a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Producto eliminado"
+                    },
+                    "404": {
+                        "description": "Producto no encontrado"
+                    },
+                    "500": {
+                        "description": "Error al eliminar el producto"
+                    }
+                }
+            }
+        },
+        "api/administradores/productos/add/stock/{id}": {
+            "post": {
+                "tags": [
+                    "Productos"
+                ],
+                "summary": "Añadir stock a un producto",
+                "operationId": "1f9d67924aa686c5c6807a2d95bb5d8a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del producto al que se le añadirá stock",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "cantidad"
+                                ],
+                                "properties": {
+                                    "cantidad": {
+                                        "description": "Cantidad de stock a añadir",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Stock añadido exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Producto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Producto no encontrado"
+                    },
+                    "500": {
+                        "description": "Error al añadir el stock"
+                    }
+                }
+            }
+        },
+        "api/administradores/productos/remove/stock/{id}": {
+            "post": {
+                "tags": [
+                    "Productos"
+                ],
+                "summary": "Quitar stock a un producto",
+                "operationId": "06fbfe7e34d9a3048b73d75852828b0f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del producto del que se le quitará stock",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "cantidad"
+                                ],
+                                "properties": {
+                                    "cantidad": {
+                                        "description": "Cantidad de stock a quitar",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 5
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Stock quitado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Producto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Producto no encontrado"
+                    },
+                    "500": {
+                        "description": "Error al quitar el stock"
+                    }
+                }
+            }
+        },
+        "api/administradores/ventas/crear": {
+            "post": {
+                "tags": [
+                    "Ventas"
+                ],
+                "summary": "Crear una nueva venta",
+                "operationId": "21e59eae5991f29ccaa8ce3a2d7bf187",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "clientes_id",
+                                    "productos"
+                                ],
+                                "properties": {
+                                    "clientes_id": {
+                                        "description": "ID del cliente",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "productos": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "id": {
+                                                    "description": "ID del producto",
+                                                    "type": "integer",
+                                                    "example": 101
+                                                },
+                                                "cantidad": {
+                                                    "description": "Cantidad de producto",
+                                                    "type": "integer",
+                                                    "example": 2
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "administradores_id": {
+                                        "description": "ID del administrador que realiza la venta",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Venta creada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Venta"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Errores de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error de validación"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error al crear la venta"
+                    }
+                }
+            }
+        },
+        "api/administradores/ventas/listar": {
+            "get": {
+                "tags": [
+                    "Ventas"
+                ],
+                "summary": "Obtener todas las ventas",
+                "operationId": "2c92c5ce8ffeed5e4d5ecd8d840de45a",
+                "responses": {
+                    "200": {
+                        "description": "Lista de ventas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Venta"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "api/administradores/ventas/buscar/{id}": {
+            "get": {
+                "tags": [
+                    "Ventas"
+                ],
+                "summary": "Obtener una venta por su ID",
+                "operationId": "37219a96d34e26082a4a150d6292cdfb",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la venta",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalles de la venta",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Venta"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Venta no encontrada"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -354,6 +1267,63 @@
                     },
                     "password": {
                         "description": "Contraseña del administrador (no se debe enviar en respuestas)",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Cliente": {
+                "required": [
+                    "id",
+                    "nombre",
+                    "cedula",
+                    "telefono",
+                    "nickname",
+                    "estado",
+                    "password",
+                    "fecha_creacion"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID del cliente",
+                        "type": "integer"
+                    },
+                    "estado": {
+                        "description": "Estado del cliente",
+                        "type": "string",
+                        "enum": [
+                            "ACTIVO",
+                            "INACTIVO"
+                        ]
+                    },
+                    "fecha_creacion": {
+                        "description": "Fecha de creación del cliente",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "fecha_actualizacion": {
+                        "description": "Fecha de última actualización del cliente",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "nombre": {
+                        "description": "Nombre del cliente",
+                        "type": "string"
+                    },
+                    "cedula": {
+                        "description": "Cédula del cliente",
+                        "type": "string"
+                    },
+                    "telefono": {
+                        "description": "Teléfono del cliente",
+                        "type": "string"
+                    },
+                    "password": {
+                        "description": "Contraseña del cliente (no se debe enviar en respuestas)",
+                        "type": "string"
+                    },
+                    "nickname": {
+                        "description": "Nombre de usuario del cliente",
                         "type": "string"
                     }
                 },
@@ -427,14 +1397,144 @@
                 "type": "object"
             },
             "Producto": {
+                "required": [
+                    "id",
+                    "estado",
+                    "fecha_creacion",
+                    "nombre",
+                    "precio_venta",
+                    "precio_base",
+                    "medida"
+                ],
                 "properties": {
                     "id": {
                         "description": "ID del producto",
-                        "type": "integer"
+                        "type": "integer",
+                        "example": 101
                     },
-                    "cantidad": {
-                        "description": "Cantidad del producto",
-                        "type": "integer"
+                    "estado": {
+                        "description": "Estado del producto",
+                        "type": "string",
+                        "enum": [
+                            "ACTIVO",
+                            "INACTIVO"
+                        ],
+                        "example": "ACTIVO"
+                    },
+                    "fecha_creacion": {
+                        "description": "Fecha de creación del producto",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-11-27T10:00:00Z"
+                    },
+                    "fecha_actualizacion": {
+                        "description": "Fecha de actualización del producto",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-11-27T12:00:00Z"
+                    },
+                    "nombre": {
+                        "description": "Nombre del producto",
+                        "type": "string",
+                        "example": "Producto A"
+                    },
+                    "descripcion": {
+                        "description": "Descripción del producto",
+                        "type": "string",
+                        "example": "Este es un producto de ejemplo."
+                    },
+                    "precio_venta": {
+                        "description": "Precio de venta del producto",
+                        "type": "number",
+                        "format": "float",
+                        "example": 20.5
+                    },
+                    "precio_base": {
+                        "description": "Precio base del producto",
+                        "type": "number",
+                        "format": "float",
+                        "example": 15
+                    },
+                    "medida": {
+                        "description": "Unidad de medida del producto",
+                        "type": "string",
+                        "enum": [
+                            "unidades",
+                            "metros",
+                            "kilos",
+                            "litros"
+                        ],
+                        "example": "kilos"
+                    }
+                },
+                "type": "object"
+            },
+            "Venta": {
+                "required": [
+                    "id",
+                    "estado",
+                    "fecha_creacion",
+                    "clientes_id",
+                    "administradores_id"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID de la venta",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "estado": {
+                        "description": "Estado de la venta",
+                        "type": "string",
+                        "enum": [
+                            "ACTIVO",
+                            "INACTIVO"
+                        ],
+                        "example": "ACTIVO"
+                    },
+                    "fecha_creacion": {
+                        "description": "Fecha de creación de la venta",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-11-27T10:00:00Z"
+                    },
+                    "fecha_actualizacion": {
+                        "description": "Fecha de actualización de la venta",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-11-27T12:00:00Z"
+                    },
+                    "clientes_id": {
+                        "description": "ID del cliente que realizó la compra",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "administradores_id": {
+                        "description": "ID del administrador que registró la venta",
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "productos": {
+                        "type": "array",
+                        "items": {
+                            "required": [
+                                "id",
+                                "cantidad"
+                            ],
+                            "properties": {
+                                "id": {
+                                    "description": "ID del producto",
+                                    "type": "integer",
+                                    "example": 101
+                                },
+                                "cantidad": {
+                                    "description": "Cantidad del producto",
+                                    "type": "integer",
+                                    "example": 2
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
@@ -455,8 +1555,20 @@
             "description": "Administradores"
         },
         {
+            "name": "Clientes",
+            "description": "Clientes"
+        },
+        {
             "name": "Pedidos",
             "description": "Pedidos"
+        },
+        {
+            "name": "Productos",
+            "description": "Productos"
+        },
+        {
+            "name": "Ventas",
+            "description": "Ventas"
         }
     ]
 }

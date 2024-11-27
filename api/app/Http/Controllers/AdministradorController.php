@@ -35,7 +35,7 @@ class AdministradorController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/admin/login",
+     *     path="api/administradores/login",
      *     summary="Iniciar sesión de administrador",
      *     tags={"Administradores"},
      *     @OA\RequestBody(
@@ -107,7 +107,7 @@ class AdministradorController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/admin/profile",
+     *     path="api/administradores/profile",
      *     summary="Obtener el perfil del administrador autenticado",
      *     tags={"Administradores"},
      *     security={{"bearerAuth": {}}},
@@ -136,7 +136,7 @@ class AdministradorController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/admin/logout",
+     *     path="api/administradores/logout",
      *     summary="Cerrar sesión del administrador",
      *     tags={"Administradores"},
      *     security={{"bearerAuth": {}}},

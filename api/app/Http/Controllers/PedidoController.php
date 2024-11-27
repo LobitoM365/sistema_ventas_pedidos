@@ -54,12 +54,7 @@ use Illuminate\Database\QueryException;
  *     )
  * )
  * 
- * @OA\Schema(
- *     schema="Producto",
- *     type="object",
- *     @OA\Property(property="id", type="integer", description="ID del producto"),
- *     @OA\Property(property="cantidad", type="integer", description="Cantidad del producto")
- * )
+
  */
 class PedidoController extends Controller
 {
@@ -74,7 +69,7 @@ class PedidoController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/pedidos/crear",
+     *     path="api/administradores/pedidos/crear",
      *     summary="Crear un nuevo pedido",
      *     tags={"Pedidos"},
      *     security={{"bearerAuth": {}}},
@@ -166,7 +161,7 @@ class PedidoController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/pedidos/listar",
+     *     path="api/administradores/pedidos/listar",
      *     summary="Obtener todos los pedidos",
      *     tags={"Pedidos"},
      *     security={{"bearerAuth": {}}},
@@ -188,7 +183,7 @@ class PedidoController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/pedidos/buscar/{id}",
+     *     path="api/administradores/pedidos/buscar/{id}",
      *     summary="Obtener un pedido por su ID",
      *     tags={"Pedidos"},
      *     security={{"bearerAuth": {}}},
@@ -223,7 +218,7 @@ class PedidoController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/pedidos/entregar/{id}",
+     *     path="api/administradores/pedidos/entregar/{id}",
      *     summary="Marcar un pedido como entregado",
      *     tags={"Pedidos"},
      *     security={{"bearerAuth": {}}},
